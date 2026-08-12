@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "row.h"
 
 enum class MetaCommandResult {
     SUCCESS,
@@ -8,7 +9,8 @@ enum class MetaCommandResult {
 
 enum class PrepareResult {
     SUCCESS,
-    UNRECOGNIZED_STATEMENT
+    UNRECOGNIZED_STATEMENT,
+    SYNTAX_ERROR
 };
 
 enum class StatementType {
@@ -18,6 +20,7 @@ enum class StatementType {
 
 struct Statement {
     StatementType type;
+    Row row_to_insert;
 };
 
 // Function declarations for the compiler

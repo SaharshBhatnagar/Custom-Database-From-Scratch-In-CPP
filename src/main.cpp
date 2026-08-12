@@ -33,10 +33,12 @@ int main() {
                 break;
             case (PrepareResult::UNRECOGNIZED_STATEMENT):
                 std::cout << "Unrecognized keyword at start of '" << input_buffer << "'\n";
-                continue; // Skip execution and restart the loop
+                continue;
+            case (PrepareResult::SYNTAX_ERROR):
+                std::cout << "Syntax error. Could not parse statement.\n";
+                continue;
         }
 
-        // Execute valid commands
         execute_statement(&statement);
         std::cout << "Executed.\n";
     }

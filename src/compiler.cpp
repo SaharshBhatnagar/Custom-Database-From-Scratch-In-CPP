@@ -1,10 +1,26 @@
 #include <iostream>
+#include <cstring>
 #include "compiler.h"
 
 PrepareResult prepare_statement(const std::string& input, Statement* statement) {
     // Basic string matching for our two commands
     if (input.substr(0, 6) == "insert") {
         statement->type = StatementType::INSERT;
+
+        int args_assigned = sscanf(
+            input.c_str(), 
+            "insert %d %32s %255s", 
+            &(statement->row_to_insert.id), 
+            statement->row_to_insert.username, 
+            statement->row_to_insert.email
+        );
+        
+        
+        if (args_assigned < 3) {
+            return PrepareResult::SYNTAX_ERROR;
+        }
+        
+
         return PrepareResult::SUCCESS;
     }
     if (input.substr(0, 6) == "select") {
