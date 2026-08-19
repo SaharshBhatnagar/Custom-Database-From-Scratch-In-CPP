@@ -3,8 +3,8 @@
 #include "compiler.h"
 
 PrepareResult prepare_statement(const std::string& input, Statement* statement) {
-    // Basic string matching for our two commands
-    if (input.substr(0, 6) == "insert") {
+
+    if (input.length() >= 6 && input.substr(0, 6) == "insert") {
         statement->type = StatementType::INSERT;
 
         int args_assigned = sscanf(
@@ -23,7 +23,7 @@ PrepareResult prepare_statement(const std::string& input, Statement* statement) 
 
         return PrepareResult::SUCCESS;
     }
-    if (input.substr(0, 6) == "select") {
+    if (input.length() >= 6 && input.substr(0, 6) == "select") {
         statement->type = StatementType::SELECT;
         return PrepareResult::SUCCESS;
     }
