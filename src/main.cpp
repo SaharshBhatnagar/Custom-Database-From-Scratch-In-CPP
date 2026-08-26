@@ -2,20 +2,28 @@
 #include <string>
 #include "repl.h"
 #include "compiler.h"
+#include "table.h"
 
 int main() {
+    Table table;
+
+    table.num_rows = 0;
+
+    for (uint32_t i = 0; i < 100; i++) {
+        table.pages[i] = nullptr;
+    }
+
     std::string input_buffer;
+
 
     while (true) {
         print_prompt();
         read_input(input_buffer);
 
-        // Ignore empty Enter presses
         if (input_buffer.empty()) {
             continue;
         }
 
-        // Route Meta-Commands
         if (input_buffer[0] == '.') {
             switch (do_meta_command(input_buffer)) {
                 case (MetaCommandResult::SUCCESS):
@@ -26,7 +34,6 @@ int main() {
             }
         }
 
-        // Route SQL Commands
         Statement statement;
         switch (prepare_statement(input_buffer, &statement)) {
             case (PrepareResult::SUCCESS):
@@ -39,7 +46,7 @@ int main() {
                 continue;
         }
 
-        execute_statement(&statement);
+        execute_statement(&statement, &table);
         std::cout << "Executed.\n";
     }
 
