@@ -5,16 +5,10 @@
 #include "table.h"
 
 int main() {
-    Table table;
 
-    table.num_rows = 0;
-
-    for (uint32_t i = 0; i < 100; i++) {
-        table.pages[i] = nullptr;
-    }
+    Table* table = db_open("mydb.db");
 
     std::string input_buffer;
-
 
     while (true) {
         print_prompt();
@@ -25,7 +19,7 @@ int main() {
         }
 
         if (input_buffer[0] == '.') {
-            switch (do_meta_command(input_buffer)) {
+            switch (do_meta_command(input_buffer, table)) {
                 case (MetaCommandResult::SUCCESS):
                     continue;
                 case (MetaCommandResult::UNRECOGNIZED):
@@ -46,7 +40,7 @@ int main() {
                 continue;
         }
 
-        execute_statement(&statement, &table);
+        execute_statement(&statement, table);
         std::cout << "Executed.\n";
     }
 
