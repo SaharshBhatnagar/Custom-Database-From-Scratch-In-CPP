@@ -26,8 +26,15 @@ struct Pager {
 };
 
 struct Table {
-    uint32_t num_rows;
     Pager* pager;
+    uint32_t root_page_num;
+};
+
+struct Cursor {
+    Table* table;
+    uint32_t page_num;
+    uint32_t cell_num;
+    bool end_of_table;
 };
 
 Pager* pager_open(const char* filename);
@@ -36,5 +43,10 @@ void db_close(Table* table);
 
 void serialize_row(Row* source, void* destination);
 void deserialize_row(void* source, Row* destination);
-void* row_slot(Table* table, uint32_t row_num);
 void* get_page(Pager* pager, uint32_t page_num);
+
+Cursor* table_start(Table* table);
+void* cursor_value(Cursor* cursor);
+void cursor_advance(Cursor* cursor);
+
+Cursor* table_find(Table* table, uint32_t key);
