@@ -3,10 +3,13 @@
 #include "repl.h"
 #include "compiler.h"
 #include "table.h"
+#include "benchmark.h"
 
 int main() {
 
     Table* table = db_open("mydb.db");
+    
+    print_storage_and_alignment_metrics();
 
     std::string input_buffer;
 
@@ -19,6 +22,17 @@ int main() {
         }
 
         if (input_buffer[0] == '.') {
+
+            if (input_buffer == ".bench") {
+                run_database_benchmarks(table);
+                continue;
+            }
+
+            if (input_buffer == ".metrics") {
+                print_storage_and_alignment_metrics();
+                continue;
+            }
+            
             switch (do_meta_command(input_buffer, table)) {
                 case (MetaCommandResult::SUCCESS):
                     continue;
